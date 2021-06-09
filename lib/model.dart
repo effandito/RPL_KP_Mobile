@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 // ------------------------------login----------------------------------
-class LoginResult {
+/*class LoginResult {
   String nimnik;
   String password;
   String nama;
@@ -60,7 +60,7 @@ class ClicksPerYear {
       : this.color = charts.Color(
       r: color.red, g: color.green, b: color.blue, a: color.alpha
   );
-}
+}*/
 
 // ------------------------------dashboard----------------------------------
 class DashboardSI {
@@ -69,8 +69,9 @@ class DashboardSI {
   String matakuliah;
   String jadwal;
   String nim_progmob;
+  String Skkp;
 
-  DashboardSI({this.mahasiswa, this.dosen, this.matakuliah, this.jadwal, this.nim_progmob});
+  DashboardSI({this.mahasiswa, this.dosen, this.matakuliah, this.jadwal, this.nim_progmob,this.Skkp});
 
   factory DashboardSI.fromJson(Map<String, dynamic> json) {
     return DashboardSI(
@@ -78,250 +79,65 @@ class DashboardSI {
         dosen: json["dosen"],
         matakuliah: json["matakuliah"],
         jadwal: json["jadwal"],
-        nim_progmob: json["nim_progmob"]
+        nim_progmob: json["nim_progmob"],
+        Skkp: json["skkp"]
     );
   }
 }
 
-// ------------------------------mahasiswa------------------------------
-class Mahasiswa{
-  String id;
-  String nama;
-  String nim;
-  String alamat;
-  String email;
-  String foto;
-  String nim_progmob;
 
-// Konstruktor
-  Mahasiswa({
-    this.id, this.nama, this.nim, this.alamat,
-    this.email, this.foto, this.nim_progmob
-  });
-
-// Mapping dari Json ke object kita
-// Map<String> -> fieldnya berupa string (tujuannya) dan dynamic karena tidak tahu isi dari JSON-nya apa
-  factory Mahasiswa.fromJson(Map<String, dynamic> map) {
-    return Mahasiswa(id: map["id"], nama: map["nama"], nim: map["nim"], alamat: map["alamat"],
-        email: map["email"], foto: map["foto"], nim_progmob: map["nim_progmob"]);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {"id": id, "nama": nama, "nim": nim, "alamat": alamat, "email": email, "foto": foto, "nim_progmob": nim_progmob};
-  }
-
-  @override
-  String toString() {
-    return 'Mahasiswa{id: $id, nama: $nama, nim: $nim, alamat: $alamat, email: $email, foto: $foto, nim_progmob: $nim_progmob}';
-  }
-}
-
-List<Mahasiswa> mahasiswaFromJson(String jsonData) {
-  final data = json.decode(jsonData);
-  return List<Mahasiswa>.from(data.map((item) => Mahasiswa.fromJson(item)));
-}
-
-String mahasiswaToJson(Mahasiswa data) {
-  final jsonData = data.toJson();
-  return json.encode(jsonData);
-}
-
-// ------------------------------dosen------------------------------
-class Dosen{
-  String id;
-  String nama;
-  String nidn;
-  String alamat;
-  String email;
-  String gelar;
-  String foto;
-  String nim_progmob;
-
-  Dosen({
-    this.id, this.nama, this.nidn, this.alamat,
-    this.email, this.gelar, this.foto, this.nim_progmob
-  });
-
-  factory Dosen.fromJson(Map<String, dynamic> map) {
-    return Dosen(id: map["id"], nama: map["nama"], nidn: map["nidn"], alamat: map["alamat"],
-        email: map["email"], gelar: map["gelar"], foto: map["foto"], nim_progmob: map["nim_progmob"]);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {"id": id, "nama": nama, "nidn": nidn, "alamat": alamat, "email": email, "foto": foto, "nim_progmob": nim_progmob};
-  }
-
-  @override
-  String toString() {
-    return 'Dosen{id: $id, nama: $nama, nidn: $nidn, alamat: $alamat, email: $email, foto: $foto, nim_progmob: $nim_progmob}';
-  }
-}
-
-List<Dosen> dosenFromJson(String jsonData) {
-  final data = json.decode(jsonData);
-  return List<Dosen>.from(data.map((item) => Dosen.fromJson(item)));
-}
-
-String dosenToJson(Dosen data) {
-  final jsonData = data.toJson();
-  return json.encode(jsonData);
-}
-
-// ------------------------------matakuliah------------------------------
-class Matakuliah{
-  String id;
-  String kode;
-  String nama;
-  String hari;
-  String sesi;
-  String sks;
-  String nim_progmob;
-
-  Matakuliah({
-    this.id, this.kode, this.nama, this.hari,
-    this.sesi, this.sks, this.nim_progmob
-  });
-
-  factory Matakuliah.fromJson(Map<String, dynamic> map) {
-    return Matakuliah(id: map["id"], kode: map["kode"], nama: map["nama"], hari: map["hari"],
-        sks: map["sks"], sesi: map["sesi"], nim_progmob: map["nim_progmob"]);
-  }
-
-  Map<String, dynamic> toJson() => <String, dynamic> {
-    "id": id, "kode": kode, "nama": nama, "hari": hari, "sesi": sesi, "sks": sks, "nim_progmob": nim_progmob
-  };
-
-  @override
-  String toString() {
-    return 'Matakuliah{id: $id, kode: $kode, nama: $nama, hari: $hari, sesi: $sesi, sks: $sks, nim_progmob: $nim_progmob}';
-  }
-}
-
-List<Matakuliah> matkulFromJson(String jsonData) {
-  final data = json.decode(jsonData);
-  return List<Matakuliah>.from(data.map((item) => Matakuliah.fromJson(item)));
-}
-
-String matkulToJson(Matakuliah data) {
-  final jsonData = data.toJson();
-  return json.encode(jsonData);
-}
-
-// ------------------------------jadwal------------------------------
-class Jadwal{
-  String id; // <-- id jadwal
-  String id_dosen;
-  String id_matkul;
-  String kode; // <-- kode matkul
-  String nama_matkul;
-  String nama_dosen;
-  String nidn;
-  String nim_progmob;
-  String hari;
-  String sesi;
-  String sks;
-
-  Jadwal({
-    this.id, this.id_dosen, this.id_matkul, this.kode, this.nama_matkul, this.nama_dosen, this.nidn,
-    this.nim_progmob, this.hari, this.sesi, this.sks
-  });
-
-  factory Jadwal.fromJson(Map<String, dynamic> map) {
-    return Jadwal(
-        id: map["id"],
-        id_dosen: map["id_dosen"],
-        id_matkul: map["id_matkul"],
-        kode: map["kode"],
-        nama_matkul: map["matkul"],
-        nama_dosen: map["dosen"],
-        nim_progmob: map["nim_progmob"],
-        hari: map["hari"],
-        sesi: map["sesi"],
-        sks: map["sks"]);
-  }
-
-  Map<String, dynamic> toJson() => <String, dynamic> {
-    "id": id, "id_dosen": id_dosen, "id_matkul": id_matkul, "kode": kode, "nama_matkul": nama_matkul, "nama_dosen": nama_dosen, "nim_progmob": nim_progmob,
-    "hari": hari, "nama": sesi, "sesi": nim_progmob, "sks": sks
-  };
-
-  @override
-  String toString() {
-    return 'Jadwal{id: $id, id_dosen: $id_dosen, id_matkul: $id_matkul, kode: $kode, nama_matkul: $nama_matkul, nama_dosen: $nama_dosen, '
-        'nim_progmob: $nim_progmob, kode: $kode, hari: $hari, sesi: $sesi, sks: $sks}';
-  }
-}
-
-List<Jadwal> jadwalFromJson(String jsonData) {
-  final data = json.decode(jsonData);
-  return List<Jadwal>.from(data.map((item) => Jadwal.fromJson(item)));
-}
-
-String jadwalToJson(Jadwal data) {
-  final jsonData = data.toJson();
-  return json.encode(jsonData);
-}
 // ------------------------------surat keterangan kp ------------------------------
 class Skkp{
-  String smstr;
-  String tahun;
-  String judul_kp;
-  String status;
-  String sks;
+  String id_skp;
+  String id_mhs;
+  String id_dosen;
+  String semester;
+  String tahun_kp;
   String nim;
-  String nik;
-  String tools;
-  String spek;
-  String dokumen;
-  String penguji;
-  String ruang;
-  String lembaga;
-  String pimpinan;
+  String telp_lembaga;
   String alamat;
-  String no_telp;
-  String wkt_pel_kp;
+  String lembaga;
+  String dokumen;
+  String pimpinan;
+  String fax;
+  String status_skp;
 
 
   Skkp({
-    this.smstr,  this.tahun, this.judul_kp, this.status, this.sks, this.nim, this.nik, this.tools,
-    this.spek, this.dokumen, this.penguji, this.ruang, this.lembaga, this.pimpinan, this.alamat, this.no_telp, this.wkt_pel_kp,
+    this.id_skp,this.id_mhs,this.id_dosen,this.semester,  this.tahun_kp, this.nim, this.telp_lembaga,  this.dokumen, this.lembaga, this.pimpinan, this.alamat, this.fax,this.status_skp,
   });
 
   factory Skkp.fromJson(Map<String, dynamic> map) {
     return Skkp(
-        smstr: map[" smstr"],
-        tahun: map["tahun"],
-        judul_kp: map["judul_kp"],
-        status: map["status"],
-        sks: map["sks"],
+        id_dosen: map[" id_dosen"],
+        id_mhs: map[" id_mhs"],
+        id_skp: map[" id_skp"],
+        semester: map[" semester"],
+        tahun_kp: map["tahun_kp"],
         nim: map["nim"],
-        nik: map["nik"],
-        spek: map["spek"],
+        telp_lembaga: map["telp_lembaga"],
+        alamat : map["alamat"],
         dokumen: map["dokumen"],
-        penguji: map["penguji"],
-        ruang: map["ruang"],
         lembaga: map["lembaga"],
         pimpinan: map["pimpinan"],
-        alamat: map["alamat"],
-        no_telp: map["no_telp"],
-        wkt_pel_kp: map["wkt_pel_kp"]
+        fax: map["fax"],
+        status_skp: map["status_skp"]
+
     );
 
   }
 
   Map<String, dynamic> toJson() => <String, dynamic> {
-    "smstr": smstr, "tahun":tahun, "judul_kp":judul_kp,
-    "status":status, "sks":sks, "nim":nim, "nik": nik, "tools":tools, "spek":spek, "dokumen":dokumen,
-    "penguji":penguji, "ruang":ruang, "lembaga":lembaga, "pimpinan":pimpinan,
-    "alamat":alamat, "no_telp":no_telp, "wkt_pel_kp":wkt_pel_kp,
+    "id_skp": id_skp,"id_dosen": id_dosen,"id_mhs": id_mhs,"semester": semester, "tahun_kp":tahun_kp,
+    "nim":nim,"alamat":alamat, "telp_lembaga":telp_lembaga,"dokumen":dokumen,
+    "lembaga":lembaga, "pimpinan":pimpinan, "fax": fax, "status_skp":status_skp,
   };
 
   @override
   String toString() {
-    return 'Skkp{smstr : $smstr,  tahun :$tahun,  judul_kp :$judul_kp,'
-        'status :$status,  sks :$sks,  nim :$nim,  nik : $nik,  tools :$tools,  spek :$spek,  dokumen :$dokumen,'
-        'penguji :%penguji,  ruang :$ruang,  lembaga :$lembaga,  pimpinan :$pimpinan,'
-        'alamat :$alamat,  no_telp :$no_telp,  wkt_pel_kp :$wkt_pel_kp,}';
+    return 'Skkp{id_skp : $id_skp,id_dosen : $id_dosen,semester : $semester,semester : $semester,  tahun_kp :$tahun_kp,  nim :$nim,'
+        'alamat :$alamat,  telp_lembaga :$telp_lembaga,  dokumen :$dokumen,  lembaga : $lembaga,'
+        'fax :$fax,  status_skp:$status_skp,}';
   }
 }
 
@@ -331,6 +147,196 @@ List<Skkp> SkkpFromJson(String jsonData) {
 }
 
 String SkkpToJson(Skkp data) {
+  final jsonData = data.toJson();
+  return json.encode(jsonData);
+}
+// ------------------------------Pra  kp ------------------------------
+class Pkp{
+  String semester;
+  String tahun_kp;
+  String status_prakp;
+  String nim;
+  String nik;
+  String tool;
+  String spek;
+  String dokumen;
+  String penguji;
+  String ruangan;
+  String lembaga;
+  String pimpinan;
+  String alamat;
+  String telp_lembaga;
+  String fax;
+  String wkt_pel_pkp;
+
+
+  Pkp({
+    this.semester,  this.tahun_kp, this. status_prakp,this.nim, this.nik, this.tool,this.fax,
+    this.spek, this.dokumen, this.penguji, this.ruangan, this.lembaga, this.pimpinan, this.alamat, this.telp_lembaga, this.wkt_pel_pkp,
+  });
+
+  factory Pkp.fromJson(Map<String, dynamic> map) {
+    return Pkp(
+        semester: map[" semester"],
+        tahun_kp: map["tahun_kp"],
+        status_prakp: map["status_prakp"],
+        nim: map["nim"],
+        nik: map["nik"],
+        tool: map["tool"],
+        spek: map["spek"],
+        dokumen: map["dokumen"],
+        penguji: map["penguji"],
+        ruangan: map["ruangan"],
+        lembaga: map["lembaga"],
+        pimpinan: map["pimpinan"],
+        alamat: map["alamat"],
+        telp_lembaga: map["telp_lembaga"],
+        fax: map["fax"],
+        wkt_pel_pkp: map["wkt_pel_pkp"]
+    );
+
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic> {
+    "semester": semester,"tahun_kp":tahun_kp, "status_prakp":status_prakp, "nim":nim, "nik": nik, "tool":tool, "spek":spek, "dokumen":dokumen,
+    "penguji":penguji, "ruangan":ruangan, "lembaga":lembaga, "pimpinan":pimpinan, "alamat":alamat, "telp_lembaga":telp_lembaga,"fax":fax, "wkt_pel_pkp":wkt_pel_pkp,
+  };
+
+  @override
+  String toString() {
+    return 'Pkp{semester : $semester,status_prakp :$status_prakp,  nim :$nim,  nik : $nik,  tool :$tool,  spek :$spek,  dokumen :$dokumen,'
+        'penguji :$penguji,  tahun_kp :$tahun_kp,ruangan :$ruangan,  lembaga :$lembaga,  pimpinan :$pimpinan,'
+        'alamat :$alamat,  telp_lembaga :$telp_lembaga, fax :$fax, wkt_pel_pkp :$wkt_pel_pkp,}';
+  }
+}
+
+List<Pkp> PkpFromJson(String jsonData) {
+  final data = json.decode(jsonData);
+  return List<Pkp>.from(data.map((item) => Pkp.fromJson(item)));
+}
+
+String PkpToJson(Pkp data) {
+  final jsonData = data.toJson();
+  return json.encode(jsonData);
+}
+// ------------------------------Kerja Praktek------------------------------
+class Kp{
+  String nim;
+  String nik;
+  String semester;
+  String tahun_kp;
+  String jdl_kp;
+  String status;
+  String tool;
+  String spek;
+  String dokumen;
+  String penguji;
+  String ruangan;
+  String lembaga;
+  String pimpinan;
+  String alamat;
+  String telp_lembaga;
+  String status_kp;
+  String wkt_pel_kp;
+
+
+  Kp({
+    this.semester,  this.tahun_kp, this.jdl_kp, this.nim, this.nik, this.tool,
+    this.spek, this.dokumen, this.penguji, this.ruangan, this.lembaga, this.pimpinan, this.alamat, this.telp_lembaga, this.status_kp,this.wkt_pel_kp,
+  });
+
+  factory Kp.fromJson(Map<String, dynamic> map) {
+    return Kp(
+        semester: map[" semester"],
+        tahun_kp: map["tahun_kp"],
+        jdl_kp: map["jdl_kp"],
+        nim: map["nim"],
+        nik: map["nik"],
+        tool: map["tool"],
+        spek: map["spek"],
+        dokumen: map["dokumen"],
+        penguji: map["penguji"],
+        ruangan: map["ruangan"],
+        lembaga: map["lembaga"],
+        pimpinan: map["pimpinan"],
+        alamat: map["alamat"],
+        telp_lembaga: map["telp_lembaga"],
+        status_kp: map["status_kp"],
+        wkt_pel_kp: map["wkt_pel_kp"]
+    );
+
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic> {
+    "semester": semester, "tahun_kp":tahun_kp, "jdl_kp":jdl_kp,
+    "nim":nim, "nik": nik, "tool":tool, "spek":spek, "dokumen":dokumen,
+    "penguji":penguji, "ruangan":ruangan, "lembaga":lembaga, "pimpinan":pimpinan,
+    "alamat":alamat, "telp_lembaga":telp_lembaga,"status_kp":status_kp, "wkt_pel_kp":wkt_pel_kp,
+  };
+
+  @override
+  String toString() {
+    return 'Kp{semester : $semester,  tahun_kp :$tahun_kp,  jdl_kp :$jdl_kp,'
+        'nim :$nim,  nik : $nik,  tool :$tool,  spek :$spek,  dokumen :$dokumen,'
+        'penguji :$penguji,  ruangan :$ruangan,  lembaga :$lembaga,  pimpinan :$pimpinan,'
+        'alamat :$alamat,  telp_lembaga :$telp_lembaga, status_kp :$status_kp, wkt_pel_kp :$wkt_pel_kp,}';
+  }
+}
+
+List<Kp> KpFromJson(String jsonData) {
+  final data = json.decode(jsonData);
+  return List<Kp>.from(data.map((item) => Kp.fromJson(item)));
+}
+
+String KpToJson(Kp data) {
+  final jsonData = data.toJson();
+  return json.encode(jsonData);
+}
+// ------------------------------ujian ------------------------------
+class Ukp{
+  String id_ujian;
+  String tahun_ukp;
+  String status_ujian;
+  String jdwl_ujian;
+  String penguji;
+  String ruangan;
+
+
+
+  Ukp({
+    this.id_ujian,this.tahun_ukp, this.jdwl_ujian, this.status_ujian, this.penguji, this.ruangan,
+  });
+
+  factory Ukp.fromJson(Map<String, dynamic> map) {
+    return Ukp(
+      id_ujian: map["id_ujian"],
+        tahun_ukp: map["tahun_ukp"],
+        ruangan: map["ruangan"],
+      penguji: map["penguji"],
+        jdwl_ujian: map["jdwl_ujian"],
+        status_ujian: map["status_ujian"],
+
+    );
+
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic> {
+    "id_ujian":  id_ujian,"tahun_ukp":  tahun_ukp, "ruangan":ruangan, "penguji":penguji,
+    "jdwl_ujian":jdwl_ujian, "status_ujian":status_ujian,};
+
+  @override
+  String toString() {
+    return 'Ukp{id_ujian : $id_ujian,tahun_ukp : $tahun_ukp,  ruangan :$ruangan,  penguji :$penguji,'
+        'jdwl_ujian :$jdwl_ujian,  status_ujian :$status_ujian, }';
+  }
+}
+
+List<Ukp> UkpFromJson(String jsonData) {
+  final data = json.decode(jsonData);
+  return List<Ukp>.from(data.map((item) => Ukp.fromJson(item)));
+}
+
+String UkpToJson(Ukp data) {
   final jsonData = data.toJson();
   return json.encode(jsonData);
 }

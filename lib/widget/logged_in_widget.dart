@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_baruu/dashboarddosen.dart';
+import 'package:flutter_baruu/dashboardkoor.dart';
 import 'package:flutter_baruu/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_baruu/dashboard.dart';
 
 class LoggedInWidget extends StatelessWidget {
   @override
@@ -35,6 +38,23 @@ class LoggedInWidget extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           SizedBox(height: 8),
+         ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+            },
+            child: Text('Dashboard Mhs'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashboardDos()));
+            },
+            child: Text('Dashboard Dosen'),
+          ),ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DashboardKoor()));
+            },
+            child: Text('Dashboard Koor'),
+          ),
           ElevatedButton(
             onPressed: () {
               final provider =

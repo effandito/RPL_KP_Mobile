@@ -1,7 +1,8 @@
 # flutter_baruu
 
 A new Flutter application.
-
+Aplikasi Mobile Team JED
+Dibuat oleh Effandito
 ## Getting Started
 
 This project is a starting point for a Flutter application.

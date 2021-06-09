@@ -1,46 +1,26 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_baruu/page/home_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_baruu/kp/detail.dart';
+import 'package:flutter_baruu/kp/Detail.dart';
 import 'package:flutter_baruu/kp/addkp.dart';
-import 'package:http/http.dart';
 
-Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  var httpClient = new Client();
-
-  runApp(MyApp());
-}
-class MyApp extends StatelessWidget {
-  static final String title = 'Google SignIn';
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: title,
-    theme: ThemeData(primarySwatch: Colors.deepOrange),
-    home: HomePage(),
-  );
-}
-/*Future<void> main() async {
+/*void main() {
   runApp(new MaterialApp(
     title: "My Store",
     home: new Home(),
   ));
 }*/
 
-class Home extends StatefulWidget {
+class Homes extends StatefulWidget {
   @override
-  _HomeState createState() => new _HomeState();
+  _HomesState createState() => new _HomesState();
 }
 
-class _HomeState extends State<Home> {
+class _HomesState extends State<Homes> {
   Future<List> getData() async {
-    final response = await http.get("http://192.168.43.131/sambung/getdata.php");
+    final response = await http.get("http://192.168.43.131:8080/rpl1/getdata.php");
     return json.decode(response.body);
   }
 
@@ -54,11 +34,11 @@ class _HomeState extends State<Home> {
         child: new Icon(Icons.add),
         onPressed: ()=>Navigator.of(context).push(
             new MaterialPageRoute(
-              builder: (BuildContext context)=> new AddData()//title: "Pengajuan KP"),
+              builder: (BuildContext context)=> new AddData(),
             )
         ),
       ),
-        body: new FutureBuilder<List>(
+      body: new FutureBuilder<List>(
         future: getData(),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
@@ -68,7 +48,8 @@ class _HomeState extends State<Home> {
             list: snapshot.data,
           )
               : new Center(
-                child: new CircularProgressIndicator(),
+            child: new CircularProgressIndicator(),
+
           );
         },
       ),

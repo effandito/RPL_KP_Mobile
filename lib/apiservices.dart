@@ -3,109 +3,162 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' show Client;
 import 'package:http/http.dart' as http;
-import 'package:flutter_percobaan/model.dart';
-
+import 'package:flutter_baruu/model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiServices {
-  final String baseUrl = "https://localhost/000webhostapp.com";
+  final String baseUrl = "http://192.168.43.131:8080/sambung";
 
   Client client = Client();
 
-  // ------------------------------login------------------------------
-  Future<bool> userLogin(LoginResult data) async {
-    final response = await client.post(
-        "$baseUrl/api/progmob/login",
-        headers: {"content-type": "application/json"},
-        body: loginToJson(data)
-    );
-    // print(response.body);
-    // print(response.body.length);
+// ------------------------------surat keterangan kp------------------------------
 
-    // if (response.statusCode == 200) {
-    //   if(response.body.length == 0){
-    //     return false;
-    //   }
-    // } else {
-    //   return true;
-    // }
-
-    // RETURNYA BISA 2 KARENA CUMAN ADA KURUNG KOTAK [] GITU AJA
-    if(response.body.length <= 2){
-      // print("false");
-      return false;
-    } else {
-      // print("true");
-      return true;
-    }
+Future<List<Skkp>> getSkkp() async {
+  final response = await client.get("$baseUrl/getskp.php");
+  if (response.statusCode == 200) {
+    return SkkpFromJson(response.body);
+  } else {
+    return null;
   }
-
-  // ------------------------------dashboard------------------------------
-  Future<DashboardSI> getDashboard() async {
-    final response = await client.get("$baseUrl/api/progmob/dashboard/72180262");
+}
+  Future<List<Skkp>> readSkkp() async {
+    final response = await client.get("$baseUrl/readskkp.php");
     if (response.statusCode == 200) {
-      return DashboardSI.fromJson(json.decode(response.body));
+      return SkkpFromJson(response.body);
     } else {
       return null;
     }
   }
 
-  // ------------------------------mahasiswa------------------------------
-  Future<List<Mahasiswa>> getMahasiswa() async {
-    final response = await client.get("$baseUrl/api/progmob/mhs/72180262");
+// Future<bool> createJadwal(Jadwal data) async {
+//   var request = http.MultipartRequest(
+//       'POST',
+//       Uri.parse("$baseUrl/api/progmob/jadwal/create")
+//   );
+//
+//   request.fields.addAll({
+//     "id_dosen": data.id_dosen,
+//     "id_matkul": data.id_matkul,
+//     "nim_progmob": data.nim_progmob
+//   });
+//
+//   var response = await request.send();
+//   if (response.statusCode == 200) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+Future<bool> createSkkp(Skkp data) async {
+  var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("$baseUrl/addskp.php")
+  );
+
+  request.fields.addAll({
+    "id_mhs": data.id_mhs,
+    "id_skp": data.id_skp,
+    "id_dosen": data.id_dosen,
+    "semester": data.semester,
+    "tahun_kp":data.tahun_kp,
+    "status_skp":data.status_skp,
+    "nim":data.nim,
+    //"telp_lembaga":data.telp_lembaga,
+    "alamat":data.alamat,
+    "dokumen":data.dokumen,
+    "lembaga":data.lembaga,
+    "pimpinan":data.pimpinan,
+    "fax":data.fax,
+  });
+
+  /*var response = await request.send();
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }*/
+}
+
+Future<bool> updateSkkp(Skkp data) async {
+  var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("$baseUrl/editskp.php")
+  );
+  Map<String,String> headers={
+    "content-type": "application/json"
+  };
+  request.headers.addAll(headers);
+
+  request.fields.addAll({
+    "id_skp":data.id_skp,
+    "nim":data.nim,
+    "semester":data.semester,
+    "tahun_kp":data.tahun_kp,
+    "telp_lembaga":data.telp_lembaga,
+    "alamat":data.alamat,
+    "dokumen":data.dokumen,
+    "lembaga":data.lembaga,
+    "pimpinan":data.pimpinan,
+    "fax":data.fax,
+  });
+  var response = await request.send();
+  // print(response.contentLength);
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+Future<bool> deleteSkkp(String id_skp) async {
+  final response = await client.post(
+      "$baseUrl/deleteskp.php",
+      headers: {"content-type": "application/json"},
+      body: json.encode(<String, String>{
+        "id_skp": id_skp,
+      })
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+// ------------------------------Pra Kerja Praktek------------------------------
+  Future<List<Pkp>> getPkp() async {
+    final response = await client.get("$baseUrl/getpkp.php");
     if (response.statusCode == 200) {
-      return mahasiswaFromJson(response.body);
+      return PkpFromJson(response.body);
     } else {
       return null;
     }
   }
 
-  // Tanpa upload file menggunakan client
-  Future<bool> createMhs(Mahasiswa data) async {
-    final response = await client.post(
-        "$baseUrl/api/progmob/mhs/create",
-        headers: {"content-type": "application/json"},
-        body: mahasiswaToJson(data)
-    );
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // File file = untuk gambarnya
-  // String filename = untuk nama filenya
-  Future<bool> createMhsWithFoto(Mahasiswa data, File file, String filename) async {
+  Future<bool> createPkp(Pkp data, String id_pkp,) async {
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$baseUrl/api/progmob/mhs/createwithfoto")
+        Uri.parse("$baseUrl/addpkp.php")
     );
 
-    // Tidak pakai application/json karena akan menambahkan secara manual
-    Map<String, String> headers={
-      "Content-type": "multipart/form-data"
-    };
-
-    request.headers.addAll(headers);
-
-    // foto sebagai key yang dibaca oleh api
-    request.files.add(
-        http.MultipartFile(
-            "foto",
-            file.readAsBytes().asStream(),
-            file.lengthSync(),
-            filename: filename
-        )
-    );
-
-    // add field sisanya, yang di depan adalah key yang dibaca oleh api
     request.fields.addAll({
-      "nama": data.nama,
-      "nim": data.nim,
-      "alamat": data.alamat,
-      "email": data.email,
-      "nim_progmob": data.nim_progmob
+      "semester": data.semester,
+      "tahun_kp":data.tahun_kp,
+      "status_prakp":data.status_prakp,
+      "nim":data.nim,
+      "tool":data.tool,
+      "spek":data.spek,
+      "dokumen":data.dokumen,
+      "penguji":data.penguji,
+      "ruangan":data.ruangan,
+      "lembaga":data.lembaga,
+      "pimpinan":data.pimpinan,
+      "alamat":data.alamat,
+      "telp_lembaga":data.telp_lembaga,
+      "fax":data.fax,
+      "wkt_pel_pkp":data.wkt_pel_pkp,
     });
 
     var response = await request.send();
@@ -116,58 +169,50 @@ class ApiServices {
     }
   }
 
-  Future<bool> updateMhsWithFoto(Mahasiswa data, File file, String nim_cari) async {
-    // Untuk tahu apakah foto diupdate atau tidak
-    String isFotoUpdate = "0";
-
+  Future<bool> updatePkp(Pkp data, String id_pkp) async {
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$baseUrl/api/progmob/mhs/updatewithfoto")
+        Uri.parse("$baseUrl/editdpkp.php")
     );
 
-    Map<String, String> headers={
-      "Content-type": "multipart/form-data"
-    };
-
-    request.headers.addAll(headers);
-
-    if (file != null) {
-      request.files.add(
-          http.MultipartFile(
-              "foto",
-              file.readAsBytes().asStream(),
-              file.lengthSync(),
-              filename: file.path
-          )
-      );
-      isFotoUpdate = "1";
-    }
 
     request.fields.addAll({
-      "nama": data.nama,
-      "nim": data.nim,
-      "alamat": data.alamat,
-      "email": data.email,
-      "nim_progmob": data.nim_progmob,
-      "nim_cari": nim_cari,
-      "is_foto_update": isFotoUpdate
+      "id_pkp": id_pkp,
+      "semester": data.semester,
+      "tahun_kp":data.tahun_kp,
+      "status_prakp":data.status_prakp,
+      "nim":data.nim,
+      "nik": data.nik,
+      "tool":data.tool,
+      "spek":data.spek,
+      "dokumen":data.dokumen,
+      "penguji":data.penguji,
+      "ruangan":data.ruangan,
+      "lembaga":data.lembaga,
+      "pimpinan":data.pimpinan,
+      "alamat":data.alamat,
+      "fax":data.fax,
+      "telp_lembaga":data.telp_lembaga,
+      "wkt_pel_pkp":data.wkt_pel_pkp,
     });
 
+
     var response = await request.send();
+    // print(response.contentLength);
     if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
+
   }
 
-  Future<bool> deleteMhs(String nim) async {
+  Future<bool> deletePkp(String id_pkp) async {
     final response = await client.post(
-        "$baseUrl/api/progmob/mhs/delete",
+        "$baseUrl/deletepkp.php",
         headers: {"content-type": "application/json"},
         body: json.encode(<String, String>{
-          "nim": nim,
-          "nim_progmob": "72180262"
+          "id_pkp": id_pkp,
         })
     );
 
@@ -178,58 +223,57 @@ class ApiServices {
     }
   }
 
-  // ------------------------------dosen------------------------------
-  Future<List<Dosen>> getDosen() async {
-    final response = await client.get("$baseUrl/api/progmob/dosen/72180180");
+// ------------------------------Kerja Praktek------------------------------
+  Future<List<Kp>> getKp() async {
+    final response = await client.get("$baseUrl/getdata.php");
     if (response.statusCode == 200) {
-      return dosenFromJson(response.body);
+      return KpFromJson(response.body);
     } else {
       return null;
     }
   }
 
-  Future<bool> createDosen(Mahasiswa data) async {
-    final response = await client.post(
-        "$baseUrl/api/progmob/dosen/create",
-        headers: {"content-type": "application/json"},
-        body: mahasiswaToJson(data)
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> createDosenWithFoto(Dosen data, File file, String filename) async {
+// Future<bool> createJadwal(Jadwal data) async {
+//   var request = http.MultipartRequest(
+//       'POST',
+//       Uri.parse("$baseUrl/api/progmob/jadwal/create")
+//   );
+//
+//   request.fields.addAll({
+//     "id_dosen": data.id_dosen,
+//     "id_matkul": data.id_matkul,
+//     "nim_progmob": data.nim_progmob
+//   });
+//
+//   var response = await request.send();
+//   if (response.statusCode == 200) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+  Future<bool> createKp(Kp data, String id_kp, String id_mhs) async {
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$baseUrl/api/progmob/dosen/createwithfoto")
-    );
-
-    Map<String, String> headers={
-      "Content-type": "multipart/form-data"
-    };
-
-    request.headers.addAll(headers);
-
-    request.files.add(
-        http.MultipartFile(
-            "foto",
-            file.readAsBytes().asStream(),
-            file.lengthSync(),
-            filename: filename
-        )
+        Uri.parse("$baseUrl/adddata.php")
     );
 
     request.fields.addAll({
-      "nama": data.nama,
-      "nidn": data.nidn,
-      "alamat": data.alamat,
-      "email": data.email,
-      "gelar": data.gelar,
-      "nim_progmob": data.nim_progmob
+      "semester": data.semester,
+      "tahun_kp":data.tahun_kp,
+      "jdl_kp":data.jdl_kp,
+      "status":data.status,
+      "nim":data.nim,
+      "tool":data.tool,
+      "spek":data.spek,
+      "dokumen":data.dokumen,
+      "penguji":data.penguji,
+      "ruangan":data.ruangan,
+      "lembaga":data.lembaga,
+      "pimpinan":data.pimpinan,
+      "alamat":data.alamat,
+      "telp_lembaga":data.telp_lembaga,
+      "wkt_pel_kp":data.wkt_pel_kp,
     });
 
     var response = await request.send();
@@ -240,204 +284,31 @@ class ApiServices {
     }
   }
 
-  Future<bool> updateDosenWithFoto(Dosen data, File file, String nidn_cari) async {
-    String isFotoUpdate = "0";
-
+  Future<bool> updateKp(Kp data, String id_kp) async {
     var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$baseUrl/api/progmob/dosen/updatewithfoto")
-    );
-
-    Map<String, String> headers={
-      "Content-type": "multipart/form-data"
-    };
-
-    request.headers.addAll(headers);
-
-    if (file != null) {
-      request.files.add(
-          http.MultipartFile(
-              "foto",
-              file.readAsBytes().asStream(),
-              file.lengthSync(),
-              filename: file.path
-          )
-      );
-      isFotoUpdate = "1";
-    }
-
-    request.fields.addAll({
-      "nama": data.nama,
-      "nidn": data.nidn,
-      "alamat": data.alamat,
-      "email": data.email,
-      "gelar": data.gelar,
-      "nim_progmob": data.nim_progmob,
-      "nidn_cari": nidn_cari,
-      "is_foto_update": isFotoUpdate
-    });
-
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> deleteDosen(String nidn) async {
-    final response = await client.post(
-        "$baseUrl/api/progmob/dosen/delete",
-        headers: {"content-type": "application/json"},
-        body: json.encode(<String, String>{
-          "nidn": nidn,
-          "nim_progmob": "72180180"
-        })
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // ------------------------------matakuliah------------------------------
-  Future<List<Matakuliah>> getMatkul() async {
-    final response = await client.get("$baseUrl/api/progmob/matkul/72180262");
-    if (response.statusCode == 200) {
-      return matkulFromJson(response.body);
-    } else {
-      return null;
-    }
-  }
-
-  Future<bool> createMatkul(Matakuliah data) async {
-    final response = await client.post(
-        "$baseUrl/api/progmob/matkul/create",
-        headers: {"content-type": "application/json"},
-        body: matkulToJson(data)
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> updateMatkul(Matakuliah data, String kode_cari) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/api/progmob/matkul/update")
-    );
-
-    request.fields.addAll({
-      "nama": data.nama,
-      "nim_progmob": data.nim_progmob,
-      "kode": data.kode,
-      "hari": data.hari,
-      "sesi": data.sesi,
-      "sks": data.sks,
-      "kode_cari": kode_cari
-    });
-
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> deleteMatkul(String kode) async {
-    final response = await client.post(
-        "$baseUrl/api/progmob/matkul/delete",
-        headers: {"content-type": "application/json"},
-        body: json.encode(<String, String>{
-          "kode": kode,
-          "nim_progmob": "72180262"
-        })
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-// ------------------------------jadwal------------------------------
-  // GET NIDN DOSEN
-  // Future<List<Dosen>> getDosenJadwal(String nidn_jadwal) async {
-  //   final response = await client.get("$baseUrl/api/progmob/dosen/72180180/" + nidn_jadwal);
-  //   if (response.statusCode == 200) {
-  //     return dosenFromJson(response.body);
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  Future<List<Jadwal>> getJadwal() async {
-    final response = await client.get("$baseUrl/api/progmob/jadwal/72180262");
-    if (response.statusCode == 200) {
-      return jadwalFromJson(response.body);
-    } else {
-      return null;
-    }
-  }
-
-  // Future<bool> createJadwal(Jadwal data) async {
-  //   var request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse("$baseUrl/api/progmob/jadwal/create")
-  //   );
-  //
-  //   request.fields.addAll({
-  //     "id_dosen": data.id_dosen,
-  //     "id_matkul": data.id_matkul,
-  //     "nim_progmob": data.nim_progmob
-  //   });
-  //
-  //   var response = await request.send();
-  //   if (response.statusCode == 200) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  Future<bool> createJadwal(Jadwal data, String id_dosen, String id_matkul) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/api/progmob/jadwal/create")
-    );
-
-    request.fields.addAll({
-      "id_dosen": id_dosen,
-      "id_matkul": id_matkul,
-      "nim_progmob": data.nim_progmob
-    });
-
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> updateJadwal(Jadwal data, String id) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/api/progmob/jadwal/update")
+        Uri.parse("$baseUrl/editdata.php")
     );
 
 
     request.fields.addAll({
-      "id": id,
-      "id_dosen": data.id_dosen,
-      "id_matkul": data.id_matkul,
-      "nim_progmob": data.nim_progmob,
+      "id_kp": id_kp,
+      "semester": data.semester,
+      "tahun_kp":data.tahun_kp,
+      "jdl_kp":data.jdl_kp,
+      "status":data.status,
+      "nim":data.nim,
+      "nik": data.nik,
+      "tool":data.tool,
+      "spek":data.spek,
+      "dokumen":data.dokumen,
+      "penguji":data.penguji,
+      "ruangan":data.ruangan,
+      "lembaga":data.lembaga,
+      "pimpinan":data.pimpinan,
+      "alamat":data.alamat,
+      "telp_lembaga":data.telp_lembaga,
+      "wkt_pel_kp":data.wkt_pel_kp,
     });
 
 
@@ -459,13 +330,93 @@ class ApiServices {
     // }
   }
 
-  Future<bool> deleteJadwal(String id) async {
+  Future<bool> deleteKp(String id_kp) async {
     final response = await client.post(
-        "$baseUrl/api/progmob/jadwal/delete",
+        "$baseUrl/delete.php",
         headers: {"content-type": "application/json"},
         body: json.encode(<String, String>{
-          "id": id,
-          "nim_progmob": "72180262"
+          "id_kp": id_kp,
+        })
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  // ------------------------------Jadwal------------------------------
+  Future<List<Ukp>> getJadwal() async {
+    final response = await client.get("$baseUrl/getjad.php");
+    if (response.statusCode == 200) {
+      return UkpFromJson(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  Future<bool> createUkp(Ukp data, String id_kp, String id_mhs) async {
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$baseUrl/addjad.php")
+    );
+
+    request.fields.addAll({
+      "tahun_ukp":data.tahun_ukp,
+      "ruangan":data.ruangan,
+      "penguji":data.penguji,
+      "jdwl_ujian":data.jdwl_ujian,
+      "status_ujian":data.status_ujian,
+    });
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateUkp(Ukp data, String id_) async {
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$baseUrl/editdata.php")
+    );
+
+
+    request.fields.addAll({
+      "tahun_ukp":data.tahun_ukp,
+      "ruangan":data.ruangan,
+      "penguji":data.penguji,
+      "jdwl_ujian":data.jdwl_ujian,
+      "status_ujian":data.status_ujian,
+    });
+
+
+    var response = await request.send();
+    // print(response.contentLength);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+    // if (response.statusCode == 200) {
+    // if (data.id_matkul != null && data.id_dosen != null) {
+    //   print("masuk true");
+    //   print(data);
+    //   return true;
+    // } else {
+    //   print("masuk else");
+    //   return false;
+    // }
+  }
+
+  Future<bool> deleteUkp(String id_kp) async {
+    final response = await client.post(
+        "$baseUrl/delete.php",
+        headers: {"content-type": "application/json"},
+        body: json.encode(<String, String>{
+
         })
     );
 
@@ -476,114 +427,4 @@ class ApiServices {
     }
   }
 
-  void getSkkp() {}
-}
-// ------------------------------surat keterangan kp------------------------------
-// GET NIDN DOSEN
-// Future<List<Dosen>> getDosenJadwal(String nidn_jadwal) async {
-//   final response = await client.get("$baseUrl/api/progmob/dosen/72180180/" + nidn_jadwal);
-//   if (response.statusCode == 200) {
-//     return dosenFromJson(response.body);
-//   } else {
-//     return null;
-//   }
-// }
-
-Future<List<Skkp>> getSkkp() async {
-  final response = await client.get("$baseUrl/api/progmob/suratkp/72180262");
-  if (response.statusCode == 200) {
-    return SkkpFromJson(response.body);
-  } else {
-    return null;
-  }
-}
-
-// Future<bool> createJadwal(Jadwal data) async {
-//   var request = http.MultipartRequest(
-//       'POST',
-//       Uri.parse("$baseUrl/api/progmob/jadwal/create")
-//   );
-//
-//   request.fields.addAll({
-//     "id_dosen": data.id_dosen,
-//     "id_matkul": data.id_matkul,
-//     "nim_progmob": data.nim_progmob
-//   });
-//
-//   var response = await request.send();
-//   if (response.statusCode == 200) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-Future<bool> createJadwal(Jadwal data, String id_dosen, String id_matkul) async {
-  var request = http.MultipartRequest(
-      'POST',
-      Uri.parse("$baseUrl/api/progmob/jadwal/create")
-  );
-
-  request.fields.addAll({
-    "id_dosen": id_dosen,
-    "id_matkul": id_matkul,
-    "nim_progmob": data.nim_progmob
-  });
-
-  var response = await request.send();
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-Future<bool> updateJadwal(Jadwal data, String id) async {
-  var request = http.MultipartRequest(
-      'POST',
-      Uri.parse("$baseUrl/api/progmob/skkp/update")
-  );
-
-
-  request.fields.addAll({
-    "id": id,
-    "id_dosen": data.id_dosen,
-    "id_matkul": data.id_matkul,
-    "nim_progmob": data.nim_progmob,
-  });
-
-
-  var response = await request.send();
-  // print(response.contentLength);
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    return false;
-  }
-  // if (response.statusCode == 200) {
-  // if (data.id_matkul != null && data.id_dosen != null) {
-  //   print("masuk true");
-  //   print(data);
-  //   return true;
-  // } else {
-  //   print("masuk else");
-  //   return false;
-  // }
-}
-
-Future<bool> deleteJadwal(String id) async {
-  final response = await client.post(
-      "$baseUrl/api/progmob/suratkp/delete",
-      headers: {"content-type": "application/json"},
-      body: json.encode(<String, String>{
-        "id": id,
-        "nim_progmob": "72180262"
-      })
-  );
-
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    return false;
-  }
-}
 }
