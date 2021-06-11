@@ -50,19 +50,9 @@ class _DashboardJadDosState extends State<DashboardJadDos> {
                         title: Text(lDos[position].jdwl_ujian+"-"+lDos[position].penguji),
                         subtitle: Text(lDos[position].ruangan+"-"+lDos[position].tahun_ukp),
                         leading: CircleAvatar(
-                          //backgroundImage: NetworkImage(user.photoURL),
-                        ),
-                        /*onTap: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            //MaterialPageRoute(builder: (context) => new (title :"Read Surat KP")),
-                              MaterialPageRoute(builder: (context) =>()),
-                          );
-                        },*/
                       ),
                     )
-                );
+                ));
               },
               itemCount: lDos.length,
             );

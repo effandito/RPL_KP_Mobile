@@ -1,4 +1,4 @@
-/*import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_baruu/apiservices.dart';
@@ -11,9 +11,8 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
   class updateKp extends StatefulWidget {
   final String title;
-  Kp mhs;
-  String nimcari;
-  updateKp({Key key, @required this.title}) : super(key: key);
+  Kp k=new Kp();
+  updateKp({Key key, @required this.title,this.k}) : super(key: key);
 
   @override
   _updateKpState createState() => _updateKpState(title);
@@ -22,7 +21,7 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 class _updateKpState extends State<updateKp> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final String title;
-  Kp mhs;
+  Kp k=new Kp();
 
 
   _updateKpState(this.title);
@@ -31,10 +30,8 @@ class _updateKpState extends State<updateKp> {
   File _imageFile;
 
   Future<void> _pickImage(ImageSource source) async {
-    File selected = await ImagePicker.pickImage(source: source);
 
     setState(() {
-      _imageFile = selected;
     });
   }
 
@@ -43,7 +40,7 @@ class _updateKpState extends State<updateKp> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: new AppBar(
-            title: new Text(this.title)
+            title: new Text("Kerja Praktek")
         ),
         body: Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -57,18 +54,6 @@ class _updateKpState extends State<updateKp> {
                       SizedBox(
                         height: 15,
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "NIM",
-                          hintText: "NIM",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(
-                              20.0, 15.0, 20.0, 15.0),
-                        ),
-                        onSaved: (String value) {
-                          this.mhs.nim = value;
-                        },
-                      ),
                       SizedBox(
                         height: 15,
                       ),
@@ -81,7 +66,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "2021",
                         ),
                         onSaved: (String value) {
-                          this.mhs.tahun_kp = value;
+                          this.k.tahun_kp = value;
                         },
                       ),
                       SizedBox(
@@ -100,7 +85,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "Spesifikasi",
                         ),
                         onSaved: (String value) {
-                          this.mhs.spek = value;
+                          this.k.spek = value;
                         },
                       ),
                       SizedBox(
@@ -115,7 +100,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "Dokumen",
                         ),
                         onSaved: (String value) {
-                          this.mhs.dokumen = value;
+                          this.k.dokumen = value;
                         },
                       ),
                       SizedBox(
@@ -130,7 +115,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "Nama Penguji",
                         ),
                         onSaved: (String value) {
-                          this.mhs.penguji = value;
+                          this.k.penguji = value;
                         },
                       ),
                       SizedBox(
@@ -145,7 +130,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "Didaktos",
                         ),
                         onSaved: (String value) {
-                          this.mhs.ruangan = value;
+                          this.k.ruangan = value;
                         },
                       ),
                       SizedBox(
@@ -160,7 +145,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "Pimpinan",
                         ),
                         onSaved: (String value) {
-                          this.mhs.pimpinan = value;
+                          this.k.pimpinan = value;
                         },
                       ),
                       SizedBox(
@@ -175,7 +160,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "CV",
                         ),
                         onSaved: (String value) {
-                          this.mhs.lembaga = value;
+                          this.k.lembaga = value;
                         },
                       ),
                       SizedBox(
@@ -190,7 +175,7 @@ class _updateKpState extends State<updateKp> {
                           hintText: "08xxxxx",
                         ),
                         onSaved: (String value) {
-                          this.mhs.telp_lembaga = value;
+                          this.k.telp_lembaga = value;
                         },
                       ),
                       SizedBox(
@@ -284,7 +269,7 @@ class _updateKpState extends State<updateKp> {
                                   FlatButton(
                                   onPressed: () {
                                     _formState.currentState.save();
-                                    ApiServices().updateKp();
+                                    ApiServices().updateKp(this.k,this.k.id_kp);
                                   Navigator.pop(context);
                                    },
                                      child: Text("no")),
@@ -333,4 +318,4 @@ class _updateKpState extends State<updateKp> {
       );
     }
   }
-}*/
+}

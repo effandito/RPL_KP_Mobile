@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_baruu/apiservices.dart';
+import 'package:flutter_baruu/koor/verifkp.dart';
+import 'package:flutter_baruu/koor/verifpkp.dart';
 import 'package:flutter_baruu/koor/verifskp.dart';
 import 'package:flutter_baruu/main.dart';
 import 'package:flutter_baruu/model.dart';
@@ -68,7 +70,7 @@ class _DashboarVerKpState extends State<DashboarVerKp> {
                                         Navigator.pop(context);
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => VerifSkp(title:"Verifikasi Pra KP")),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
+                                          MaterialPageRoute(builder: (context) => VerifKp(title:"Verifikasi KP")),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
                                         ).then(onGoBack);
                                       },
                                     ),
@@ -81,7 +83,7 @@ class _DashboarVerKpState extends State<DashboarVerKp> {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => VerifSkp(title:"Verifikasi Pra KP")),
+                            MaterialPageRoute(builder: (context) => VerifKp(title:"Verifikasi  KP")),
                           );
                         },
                       ),

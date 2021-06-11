@@ -47,8 +47,8 @@ class _DashboardDafBState extends State<DashboardDafB> {
                     margin: new EdgeInsets.symmetric(horizontal: 5.0,vertical: 1.0),
                     child: Container(
                       child: ListTile(
-                        title: Text(lDos[position].nim+"-"+lDos[position].telp_lembaga),
-                        subtitle: Text(lDos[position].jdl_kp+"-"+lDos[position].lembaga),
+                        title: Text(lDos[position].nim),
+                        subtitle: Text(lDos[position].jdl_kp),
                         leading: CircleAvatar(
                           //backgroundImage: NetworkImage(user.photoURL),
                         ),

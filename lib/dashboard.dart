@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_baruu/kp/dashboardbaru.dart';
 import 'package:flutter_baruu/kp/dashboardkp.dart';
+import 'package:flutter_baruu/mahasiswa/dashboardjdwlumhs.dart';
 import 'package:flutter_baruu/prakp/dashboardpkp.dart';
 import 'package:flutter_baruu/suratkp/dashboardsuratkp.dart';
 import 'package:flutter_baruu/suratkp/dashboardsuratkp.dart';
@@ -162,7 +163,7 @@ class _DashboardState extends State<Dashboard> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) =>
-                          DashboarKp(title: "Data Kerja Praktek",))
+                          DashboardJadMhs(title: "Data Jadwal",))
                   ).then(onGoBack);
                 },
               ),
@@ -182,7 +183,7 @@ class _DashboardState extends State<Dashboard> {
                       context,
                       MaterialPageRoute(builder: (context) =>
                       SignUpWidget ())
-                  ).then(onGoBack);
+                  );
                 },
               ),
               /*ListTile(

@@ -109,7 +109,7 @@ class _DashboarKpState extends State<DashboarKp> {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => readKp(title: "Read Matakuliah",mhs: lMhs[position])),
+                            MaterialPageRoute(builder: (context) => readKp(title: "Read KP",mhs: lMhs[position])),
                           );
                         },
                       ),

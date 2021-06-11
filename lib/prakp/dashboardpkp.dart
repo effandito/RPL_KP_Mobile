@@ -6,6 +6,7 @@ import 'package:flutter_baruu/main.dart';
 import 'package:flutter_baruu/model.dart';
 import 'package:flutter_baruu/prakp/addprakp.dart';
 import 'package:flutter_baruu/prakp/editprakp.dart';
+import 'package:flutter_baruu/prakp/readpkp.dart';
 import 'package:flutter_baruu/suratkp/detailsuratkp.dart';
 
 
@@ -81,7 +82,7 @@ class _DashboarPkpState extends State<DashboarPkp> {
                                         Navigator.pop(context);
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => EditPkp()),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
+                                          MaterialPageRoute(builder: (context) => editPkp()),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
                                         ).then(onGoBack);
                                       },
                                     ),
@@ -109,7 +110,7 @@ class _DashboarPkpState extends State<DashboarPkp> {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => detailSkp()),
+                            MaterialPageRoute(builder: (context) => ReadPkp(title :'sPra KP',p :lMhs[position])),
                           );
                         },
                       ),

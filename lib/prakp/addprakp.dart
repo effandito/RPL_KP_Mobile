@@ -12,6 +12,7 @@ class _AddPkpState extends State<AddPkp> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   Pkp p= new Pkp();
   TextEditingController controllerIdPkp = new TextEditingController();
+  TextEditingController controllerIdDos= new TextEditingController();
   TextEditingController controllerIdMhs= new TextEditingController();
   TextEditingController controllerNim= new TextEditingController();
   TextEditingController controllerNik= new TextEditingController();
@@ -37,6 +38,7 @@ class _AddPkpState extends State<AddPkp> {
 
     http.post(url, body: {
       "id_mhs": controllerIdMhs.text,
+      "id_dosen": controllerIdDos.text,
       "nim": controllerNim.text,
       "nik": controllerNik.text,
       "semester": controllerSemester.text,
@@ -71,6 +73,14 @@ class _AddPkpState extends State<AddPkp> {
           key: _formState,
           child: Column(
               children: <Widget>[
+                new TextFormField(
+                  controller: controllerNim,
+                  decoration: new InputDecoration(
+                      hintText: "72 ", labelText: "id Dosen"),
+                  onSaved:(String value) {
+                    this.p.nim = value;
+                  },
+                ),
                 new TextFormField(
                   controller: controllerNim,
                   decoration: new InputDecoration(

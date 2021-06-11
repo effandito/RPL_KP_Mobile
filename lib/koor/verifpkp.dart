@@ -32,11 +32,10 @@ class _VerifPkpState extends State<VerifPkp> {
 
 
   @override
-  Widget build(BuildContext context) {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: new AppBar(
-            title: new Text(this.title)
+            title: new Text("PRA KP")
         ),
         body: Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -109,10 +108,17 @@ class _VerifPkpState extends State<VerifPkp> {
                                       child: Text("yes")
                                   ),*/
                                   FlatButton(
+                                      onPressed: () async {
+                                        _formState.currentState.save();
+                                        ApiServices().updatePkp(this.p);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("YES")),
+                                  FlatButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: Text("no")
+                                      child: Text("NO")
                                   )
                                 ],
                               );
@@ -153,4 +159,4 @@ class _VerifPkpState extends State<VerifPkp> {
       );
     }
   }
-}
+

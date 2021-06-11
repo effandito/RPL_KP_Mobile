@@ -32,7 +32,6 @@ class _VerifSkpState extends State<VerifSkp> {
 
 
   @override
-  Widget build(BuildContext context) {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: new AppBar(
@@ -160,4 +159,4 @@ class _VerifSkpState extends State<VerifSkp> {
       );
     }
   }
-}
+

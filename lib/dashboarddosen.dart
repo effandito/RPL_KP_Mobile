@@ -129,7 +129,7 @@ class _DashboardDosState extends State<DashboardDos> {
                       context,
                       MaterialPageRoute(builder: (context) =>
                           SignUpWidget ())
-                  ).then(onGoBack);
+                  );
                 },
               ),
             ],

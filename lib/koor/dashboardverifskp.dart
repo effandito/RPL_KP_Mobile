@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_baruu/apiservices.dart';
 import 'package:flutter_baruu/koor/verifskp.dart';
+import 'package:flutter_baruu/koor/verifskp.dart';
 import 'package:flutter_baruu/main.dart';
 import 'package:flutter_baruu/model.dart';
 import 'package:flutter_baruu/prakp/addprakp.dart';
@@ -24,7 +25,7 @@ class _DashboarVerSkpState extends State<DashboarVerSkp> {
   final _formkey = GlobalKey<FormState>();
 
   List<Skkp> lMhs = new List();
-
+  
   FutureOr onGoBack(dynamic value){
     setState(() {});
   }
@@ -52,8 +53,8 @@ class _DashboarVerSkpState extends State<DashboarVerSkp> {
                     margin: new EdgeInsets.symmetric(horizontal: 5.0,vertical: 1.0),
                     child: Container(
                       child: ListTile(
-                        title: Text(lMhs[position].nim),
-                        subtitle: Text(lMhs[position].tahun_kp),
+                        title: Text(lMhs[position].nim+"-"+lMhs[position].dokumen),
+                        subtitle: Text(lMhs[position].status_skp),
                         leading: CircleAvatar(
                           //backgroundImage: NetworkImage(user.photoURL),
                         ),
@@ -67,23 +68,15 @@ class _DashboarVerSkpState extends State<DashboarVerSkp> {
                                     FlatButton(
                                       child: Text("Update"),
                                       onPressed: (){
-                                        Navigator.pop(context);
                                         Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => VerifSkp(sk :lMhs[position])),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>VerifSkp(title: "Verifikasi SKP"))//title:"Tambah KP"))
                                         ).then(onGoBack);
                                       },
                                     ),
                                   ],
                                 ),
                               )
-                          );
-                        },
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => VerifSkp(sk :lMhs[position])),
                           );
                         },
                       ),

@@ -153,6 +153,9 @@ String SkkpToJson(Skkp data) {
 // ------------------------------Pra  kp ------------------------------
 class Pkp{
   String semester;
+  String id_pkp;
+  String id_mhs;
+  String id_dosen;
   String tahun_kp;
   String status_prakp;
   String nim;
@@ -171,7 +174,7 @@ class Pkp{
 
 
   Pkp({
-    this.semester,  this.tahun_kp, this. status_prakp,this.nim, this.nik, this.tool,this.fax,
+    this.id_mhs,this.id_dosen,this.id_pkp,this.semester,  this.tahun_kp, this. status_prakp,this.nim, this.nik, this.tool,this.fax,
     this.spek, this.dokumen, this.penguji, this.ruangan, this.lembaga, this.pimpinan, this.alamat, this.telp_lembaga, this.wkt_pel_pkp,
   });
 
@@ -179,7 +182,10 @@ class Pkp{
     return Pkp(
         semester: map[" semester"],
         tahun_kp: map["tahun_kp"],
+        id_pkp: map["id_pkp"],
         status_prakp: map["status_prakp"],
+        id_dosen: map[" id_dosen"],
+        id_mhs: map[" id_mhs"],
         nim: map["nim"],
         nik: map["nik"],
         tool: map["tool"],
@@ -198,7 +204,7 @@ class Pkp{
   }
 
   Map<String, dynamic> toJson() => <String, dynamic> {
-    "semester": semester,"tahun_kp":tahun_kp, "status_prakp":status_prakp, "nim":nim, "nik": nik, "tool":tool, "spek":spek, "dokumen":dokumen,
+    "id_dosen": id_dosen,"id_mhs": id_mhs,"semester": semester,"tahun_kp":tahun_kp, "status_prakp":status_prakp, "nim":nim, "nik": nik, "tool":tool, "spek":spek, "dokumen":dokumen,
     "penguji":penguji, "ruangan":ruangan, "lembaga":lembaga, "pimpinan":pimpinan, "alamat":alamat, "telp_lembaga":telp_lembaga,"fax":fax, "wkt_pel_pkp":wkt_pel_pkp,
   };
 
@@ -206,7 +212,7 @@ class Pkp{
   String toString() {
     return 'Pkp{semester : $semester,status_prakp :$status_prakp,  nim :$nim,  nik : $nik,  tool :$tool,  spek :$spek,  dokumen :$dokumen,'
         'penguji :$penguji,  tahun_kp :$tahun_kp,ruangan :$ruangan,  lembaga :$lembaga,  pimpinan :$pimpinan,'
-        'alamat :$alamat,  telp_lembaga :$telp_lembaga, fax :$fax, wkt_pel_pkp :$wkt_pel_pkp,}';
+        'alamat :$alamat,  telp_lembaga :$telp_lembaga, id_dosen : $id_dosen,id_mhs:$id_mhs ,fax :$fax, wkt_pel_pkp :$wkt_pel_pkp,}';
   }
 }
 
@@ -222,6 +228,7 @@ String PkpToJson(Pkp data) {
 // ------------------------------Kerja Praktek------------------------------
 class Kp{
   String nim;
+  String id_kp;
   String nik;
   String semester;
   String tahun_kp;
@@ -241,13 +248,14 @@ class Kp{
 
 
   Kp({
-    this.semester,  this.tahun_kp, this.jdl_kp, this.nim, this.nik, this.tool,
+    this.semester,  this.id_kp,this.tahun_kp, this.jdl_kp, this.nim, this.nik, this.tool,
     this.spek, this.dokumen, this.penguji, this.ruangan, this.lembaga, this.pimpinan, this.alamat, this.telp_lembaga, this.status_kp,this.wkt_pel_kp,
   });
 
   factory Kp.fromJson(Map<String, dynamic> map) {
     return Kp(
         semester: map[" semester"],
+        id_kp: map["id_kp"],
         tahun_kp: map["tahun_kp"],
         jdl_kp: map["jdl_kp"],
         nim: map["nim"],

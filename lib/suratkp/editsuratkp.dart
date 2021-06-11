@@ -54,18 +54,6 @@ class _editSkpState extends State<editSkp> {
                       SizedBox(
                         height: 15,
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "NIM",
-                          hintText: "NIM",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(
-                              20.0, 15.0, 20.0, 15.0),
-                        ),
-                        onSaved: (String value) {
-                          this.sk.nim = value;
-                        },
-                      ),
                       SizedBox(
                         height: 15,
                       ),

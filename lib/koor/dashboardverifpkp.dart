@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_baruu/apiservices.dart';
+import 'package:flutter_baruu/koor/verifpkp.dart';
 import 'package:flutter_baruu/koor/verifskp.dart';
 import 'package:flutter_baruu/main.dart';
 import 'package:flutter_baruu/model.dart';
@@ -50,7 +51,7 @@ class _DashboarVerPkpState extends State<DashboarVerPkp> {
                     margin: new EdgeInsets.symmetric(horizontal: 5.0,vertical: 1.0),
                     child: Container(
                       child: ListTile(
-                        title: Text(lMhs[position].nim+"-"+lMhs[position].nim),
+                        title: Text(lMhs[position].nim+"-"+lMhs[position].status_prakp),
                         subtitle: Text(lMhs[position].tahun_kp),
                         leading: CircleAvatar(
                           //backgroundImage: NetworkImage(user.photoURL),
@@ -68,7 +69,7 @@ class _DashboarVerPkpState extends State<DashboarVerPkp> {
                                         Navigator.pop(context);
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => VerifSkp(title:"Verifikasi Pra KP")),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
+                                          MaterialPageRoute(builder: (context) => VerifPkp(title:"Verifikasi Pra KP")),//title: "Update KP",mhs: lMhs[position],nimcari: lMhs[position].nim)),
                                         ).then(onGoBack);
                                       },
                                     ),
@@ -81,7 +82,7 @@ class _DashboarVerPkpState extends State<DashboarVerPkp> {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => VerifSkp(title:"Verifikasi Pra KP")),
+                            MaterialPageRoute(builder: (context) => VerifPkp(title:"Verifikasi Pra KP")),
                           );
                         },
                       ),

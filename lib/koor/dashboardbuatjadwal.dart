@@ -105,7 +105,7 @@ class _DashboardJdwlState extends State<DashboardJdwl> {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => new ReadSkp(title :"Read Jadwal")),
+                            MaterialPageRoute(builder: (context) => new ReadSkp(title :'read jadwal')),
                           );
                         },
                       ),

@@ -10,22 +10,23 @@ import 'package:flutter/material.dart';
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class VerifKp extends StatefulWidget {
+  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final String title;
-  Kp mhs = new Kp();
+  Kp k = new Kp();
 
-  VerifKp({Key key, @required this.title}) : super(key: key);
+  VerifKp({Key key, @required this.title,this.k}) : super(key: key);
 
   @override
-  _VerifKpState createState() => _VerifKpState(title);
+  _VerifKpState createState() => _VerifKpState(title,k);
 }
 
 class _VerifKpState extends State<VerifKp> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final String title;
-  Kp mhs = new Kp();
+  Kp k = new Kp();
 
 
-  _VerifKpState(this.title);
+  _VerifKpState(this.title,this.k);
 
   bool _isLoading = false;
 
@@ -33,11 +34,10 @@ class _VerifKpState extends State<VerifKp> {
 
 
   @override
-  Widget build(BuildContext context) {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: new AppBar(
-            title: new Text(this.title)
+            title: new Text("Verif KP")
         ),
         body: Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -60,7 +60,7 @@ class _VerifKpState extends State<VerifKp> {
                               20.0, 15.0, 20.0, 15.0),
                         ),
                         onSaved: (String value) {
-                          this.mhs.status_kp = value;
+                          this.k.status_kp = value;
                         },
                       ),
                       SizedBox(
@@ -109,13 +109,20 @@ class _VerifKpState extends State<VerifKp> {
                                       },
                                       child: Text("yes")
                                   ),*/
-                                  FlatButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text("no")
-                                  )
-                                ],
+                              FlatButton(
+                              onPressed: () async {
+                              _formState.currentState.save();
+                              ApiServices().updateKp(this.k,this.k.id_kp);
+                              Navigator.pop(context);
+                              },
+                              child: Text("YES")),
+                              FlatButton(
+                              onPressed: () {
+                              Navigator.pop(context);
+                              },
+                              child: Text("NO")
+                              )
+                              ],
                               );
                             },
                           );
@@ -154,4 +161,4 @@ class _VerifKpState extends State<VerifKp> {
       );
     }
   }
-}
+

@@ -92,7 +92,7 @@ class _DetailState extends State<Detail> {
                       color: Colors.green,
                       onPressed: ()=>Navigator.of(context).push(
                           new MaterialPageRoute(
-                            builder: (BuildContext context)=>new EditPkp(list: widget.list, index: widget.index,),
+                            builder: (BuildContext context)=>new editPkp(),
                           )
                       ),
                     ),

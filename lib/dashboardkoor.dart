@@ -3,6 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_baruu/koor/dashboardbuatjadwal.dart';
+import 'package:flutter_baruu/koor/dashboardverifkp.dart';
+import 'package:flutter_baruu/koor/dashboardverifpkp.dart';
 import 'package:flutter_baruu/koor/dashboardverifskp.dart';
 import 'package:flutter_baruu/kp/dashboardbaru.dart';
 import 'package:flutter_baruu/kp/dashboardkp.dart';
@@ -94,7 +97,7 @@ class _DashboardKoorState extends State<DashboardKoor> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) =>
-                          DashboarKp(title: "Pra KP",))
+                          DashboarVerPkp(title: "Pra KP",))
                   ).then(onGoBack);
                 },
               ),
@@ -107,12 +110,25 @@ class _DashboardKoorState extends State<DashboardKoor> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) =>
-                          DashboarKp(title: "Data Pra KP",))
+                          DashboarVerKp(title: "Data Pra KP",))
                   ).then(onGoBack);
                 },
               ),
               ListTile(
-                title: Text(" Lihat Daftar Regis"),
+                title: Text("Penjadwalan Ujian"),
+                trailing: Icon(Icons.domain_verification),
+                subtitle: Text("Menu Penjadwalan"),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          DashboardJdwl(title: "Data Jadwal",))
+                  ).then(onGoBack);
+                },
+              ),
+              ListTile(
+                title: Text("Lihat Daftar Regis"),
                 trailing: Icon(Icons.library_books),
                 onTap: () {
                   Navigator.pop(context);

@@ -88,7 +88,7 @@ class _AddDataState extends State<AddData> {
                 new TextFormField(
                   controller: controllerSemester,
                   decoration: new InputDecoration(
-                      hintText: "7", labelText: "Semester"),
+                      hintText: "Genap / Ganjil", labelText: "Semester"),
                   onSaved:(String value) {
                     this.kp.semester = value;
                   },

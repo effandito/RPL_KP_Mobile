@@ -35,7 +35,7 @@ class _ReadSkpState extends State<ReadSkp> {
                   TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Telp Lembaga'
+                       // hintText: 'Telp Lembaga'
                     ),
                   ),
                   SizedBox(

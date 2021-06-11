@@ -1,174 +1,304 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_baruu/apiservices.dart';
+import 'package:flutter_baruu/model.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_baruu/main.dart';
 
-class EditPkp extends StatefulWidget {
-  final List list;
-  final int index;
 
-  EditPkp({this.list, this.index});
-  String dropdownValue = 'Genap';
+final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+
+class editPkp extends StatefulWidget {
+  final String title;
+  Pkp p=new Pkp();
+  editPkp({Key key, @required this.title,this.p}) : super(key: key);
+
   @override
-  _EditPkpState createState() => new _EditPkpState();
+  _editPkpState createState() => _editPkpState(title,p);
 }
 
-class _EditPkpState extends State<EditPkp> {
-
-  TextEditingController controllerIdPkp ;
-  TextEditingController controllerIdMhs;
-  TextEditingController controllerNim;
-  TextEditingController controllerNik;
-  TextEditingController controllerSemester;
-  TextEditingController controllerTahunKp;
-  TextEditingController controllerTool;
-  TextEditingController controllerSpek;
-  TextEditingController controllerDokumen;
-  TextEditingController controllerPenguji;
-  TextEditingController controllerRuangan;
-  TextEditingController controllerPimpinan;
-  TextEditingController controllerLembaga;
-  TextEditingController controllerAlamat;
-  TextEditingController controllerTelp;
-  TextEditingController controllerWaktuPelPkp;
-  TextEditingController controllerStatusPraKp;
+class _editPkpState extends State<editPkp> {
+  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
+  final String title;
+  Pkp p=new Pkp();
 
 
+  _editPkpState(this.title,this.p);
 
-  void editPkp() {
-    var url="http://192.168.43.131:8080/rpl1/editpkp.php";
-    http.post(url,body: {
-      "id_pkp": widget.list[widget.index]['id_pkp'],
-      "id_mhs": controllerIdMhs.text,
-      "nim": controllerNim.text,
-      "nik": controllerNik.text,
-      "semester": controllerSemester.text,
-      "tahun_kp": controllerTahunKp.text,
-      "tool": controllerTool.text,
-      "spek": controllerSpek.text,
-      "dokumen": controllerDokumen.text,
-      "penguji": controllerPenguji.text,
-      "ruangan": controllerRuangan.text,
-      "pimpinan": controllerPimpinan.text,
-      "lembaga": controllerLembaga.text,
-      "alamat": controllerAlamat.text,
-      "telp_lembaga": controllerTelp.text,
-      "wkt_pel_kp": controllerWaktuPelPkp.text,
-      "status_pra_kp": controllerStatusPraKp.text,
+  bool _isLoading = false;
 
+
+  Future<void> _pickImage(ImageSource source) async {
+
+
+    setState(() {
     });
-  }
-
-
-  @override
-  void initState() {
-    controllerIdPkp= new TextEditingController(text: widget.list[widget.index]['id_pkp'] );
-    controllerNim= new TextEditingController(text: widget.list[widget.index]['nim'] );
-    controllerNik= new TextEditingController(text: widget.list[widget.index]['nik'] );
-    controllerSemester= new TextEditingController(text: widget.list[widget.index]['semester'] );
-    controllerTahunKp= new TextEditingController(text: widget.list[widget.index]['tahun_kp'] );
-    controllerTool= new TextEditingController(text: widget.list[widget.index]['tool'] );
-    controllerSpek= new TextEditingController(text: widget.list[widget.index]['spek'] );
-    controllerDokumen= new TextEditingController(text: widget.list[widget.index]['dokumen'] );
-    controllerPenguji= new TextEditingController(text: widget.list[widget.index]['penguji'] );
-    controllerRuangan= new TextEditingController(text: widget.list[widget.index]['ruangan'] );
-    controllerPimpinan= new TextEditingController(text: widget.list[widget.index]['pimpinan'] );
-    controllerLembaga= new TextEditingController(text: widget.list[widget.index]['lembaga'] );
-    controllerAlamat= new TextEditingController(text: widget.list[widget.index]['alamat'] );
-    controllerTelp= new TextEditingController(text: widget.list[widget.index]['telp'] );
-    controllerWaktuPelPkp= new TextEditingController(text: widget.list[widget.index]['wkt_pel_Pkp'] );
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: new AppBar(
-        title: new Text("EDIT DATA"),
+          title: new Text("Pra KP")
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: <Widget>[
-            new Column(
-              children: <Widget>[
-                new TextField(
-                  controller: controllerNim,
-                  decoration: new InputDecoration(
-                      hintText: "72180777 ", labelText: "NIM"),
+      body: Container(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: SingleChildScrollView(
+          child: Stack(
+            children: <Widget>[
+              Form(
+                key: _formState,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Telp Lembaga",
+                        hintText: "08777xxxxx",
+                      ),
+                      onSaved: (String value) {
+                        this.p.telp_lembaga = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Alamat",
+                        hintText: "Alamat",
+                      ),
+                      onSaved: (String value) {
+                        this.p.alamat = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Dokumen",
+                        hintText: "Dokumen",
+                      ),
+                      onSaved: (String value) {
+                        this.p.dokumen = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Lembaga",
+                        hintText: "Lembaga",
+                      ),
+                      onSaved: (String value) {
+                        this.p.lembaga = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Pimpinan",
+                        hintText: "Pimpinan",
+                      ),
+                      onSaved: (String value) {
+                        this.p.pimpinan = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Ruangan",
+                        hintText: "ruangan",
+                      ),
+                      onSaved: (String value) {
+                        this.p.ruangan = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(
+                            20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(),
+                        labelText: "Fax",
+                        hintText: "08xxxxx",
+                      ),
+                      onSaved: (String value) {
+                        this.p.fax = value;
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    /*TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(
+                              20.0, 15.0, 20.0, 15.0),
+                          border: OutlineInputBorder(),
+                          labelText: "Waktu Pelaksanaan",
+                          hintText: "DD/MM/YYYY",
+                        ),
+                        onSaved: (String value) {
+                          this.mhs.wkt_pel_kp = value;
+                        },
+                      ),*/
+                    SizedBox(
+                      height: 15,
+                    ),
+
+                    MaterialButton(
+                      minWidth: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      color: Colors.blue,
+                      //onPressed: () {
+                      //_pickImage(ImageSource.gallery);
+                      //},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Icon(Icons.image, color: Colors.white,),
+                          Text("Upload",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    MaterialButton(
+                      minWidth: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      color: Colors.blue,
+                      onPressed: () {
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("Simpan"),
+                              content: Text("Apakah akan disimpan ?"),
+                              actions: <Widget>[
+                                /* FlatButton(
+                                      onPressed: () async {
+                                        _formState.currentState.save();
+                                        setState(() => _isLoading = true);
+                                        //this.mhs.nim_progmob = "72180262";
+                                        List<int> imagesBytes = _imageFile
+                                            .readAsBytesSync();
+                                        //this.mhs.foto =
+                                            base64Encode(imagesBytes);
+                                        ApiServices().//updateMhsWithFoto(
+                                        (
+                                        this.mhs,
+                                          _imageFile,
+                                          nimcari,
+                                        ).then((isSuccess) {
+                                          setState(() => _isLoading = false);
+                                          if (isSuccess) {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          } else {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          }
+                                        });
+                                      },
+                                      child: Text("yes")
+                                  ),*/
+                                FlatButton(
+                                    onPressed: () {
+                                      _formState.currentState.save();
+                                      ApiServices().updatePkp(this.p);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("YES")),
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("no")
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text("simpan",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                new TextField(
-                  controller: controllerTahunKp,
-                  decoration: new InputDecoration(
-                      hintText: "2021", labelText: "Tahun Pra KP"),
-                ),
-                new TextField(
-                  controller: controllerTool,
-                  decoration: new InputDecoration(
-                      hintText: "Tools yang digunakan", labelText: "Tools"),
-                ),
-                new TextField(
-                  controller: controllerSpek,
-                  decoration: new InputDecoration(
-                      hintText: "Spesifikasi sistem yang dibuat", labelText: "Spesifikasi"),
-                ),
-                new TextField(
-                  controller: controllerDokumen,
-                  decoration: new InputDecoration(
-                      hintText: "Dokumen ", labelText: "Dokumen"),
-                ),
-                new TextField(
-                  controller: controllerPenguji,
-                  decoration: new InputDecoration(
-                      hintText: "Nama PENGUJI ", labelText: "Penguji"),
-                ),
-                new TextField(
-                  controller: controllerRuangan,
-                  decoration: new InputDecoration(
-                      hintText: "Didaktos", labelText: "Ruang"),
-                ),
-                new TextField(
-                  controller: controllerPimpinan,
-                  decoration: new InputDecoration(
-                      hintText: "Pimpinan", labelText: "Pimpinan"),
-                ),
-                new TextField(
-                  controller: controllerLembaga,
-                  decoration: new InputDecoration(
-                      hintText: "CV", labelText: "Lembaga"),
-                ),
-                new TextField(
-                  controller: controllerAlamat,
-                  decoration: new InputDecoration(
-                      hintText: "Alamat", labelText: "Alamat"),
-                ),
-                new TextField(
-                  controller: controllerTelp,
-                  decoration: new InputDecoration(
-                      hintText: "0811xxxxxx", labelText: "No Telepon Lembaga"),
-                ),
-                new TextField(
-                  controller: controllerWaktuPelPkp,
-                  decoration: new InputDecoration(
-                      hintText: "DD/MM/YYYY", labelText: "Waktu Pelaksanaan"),
-                ),
-                new Padding(
-                  padding: const EdgeInsets.all(10.0),
-                ),
-                new RaisedButton(
-                  child: new Text("EDIT DATA"),
-                  color: Colors.blueAccent,
-                  onPressed: () {
-                    editPkp();
-                    Navigator.of(context).push(
-                        new MaterialPageRoute(
-                            builder: (BuildContext context)=>Home()
-                        )
-                    );
-                  },
-                )
-              ],
-            ),
-          ],
+              ),
+              _isLoading
+                  ? Stack(
+                children: <Widget>[
+                  Opacity(
+                    opacity: 0.3,
+                    child: ModalBarrier(
+                      dismissible: false,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Center(
+                    child: CircularProgressIndicator(),
+                  )
+                ],
+              )
+                  : Container(),
+            ],
+          ),
         ),
       ),
     );

@@ -99,6 +99,7 @@ Future<bool> updateSkkp(Skkp data) async {
     "dokumen":data.dokumen,
     "lembaga":data.lembaga,
     "pimpinan":data.pimpinan,
+    "status_skp":data.status_skp,
     "fax":data.fax,
   });
   var response = await request.send();
@@ -119,7 +120,16 @@ Future<bool> deleteSkkp(String id_skp) async {
         "id_skp": id_skp,
       })
   );
-
+}
+  Future<bool> verifSkkp(String id_skp,String status) async {
+    final response = await client.post(
+        "$baseUrl/verifskp.php",
+        headers: {"content-type": "application/json"},
+        body: json.encode(<String, String>{
+          "id_skp": id_skp,
+          "status_skp": status
+        })
+    );
   if (response.statusCode == 200) {
     return true;
   } else {
@@ -137,13 +147,14 @@ Future<bool> deleteSkkp(String id_skp) async {
   }
 
 
-  Future<bool> createPkp(Pkp data, String id_pkp,) async {
+  Future<bool> createPkp(Pkp data) async {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse("$baseUrl/addpkp.php")
     );
 
     request.fields.addAll({
+      "id_pkp": data.id_pkp,
       "semester": data.semester,
       "tahun_kp":data.tahun_kp,
       "status_prakp":data.status_prakp,
@@ -169,15 +180,18 @@ Future<bool> deleteSkkp(String id_skp) async {
     }
   }
 
-  Future<bool> updatePkp(Pkp data, String id_pkp) async {
+  Future<bool> updatePkp(Pkp data) async {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse("$baseUrl/editdpkp.php")
     );
-
+    Map<String,String> headers={
+      "content-type": "application/json"
+    };
+    request.headers.addAll(headers);
 
     request.fields.addAll({
-      "id_pkp": id_pkp,
+      "id_pkp": data.id_pkp,
       "semester": data.semester,
       "tahun_kp":data.tahun_kp,
       "status_prakp":data.status_prakp,
@@ -215,23 +229,32 @@ Future<bool> deleteSkkp(String id_skp) async {
           "id_pkp": id_pkp,
         })
     );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
   }
+    Future<bool> verifPkp(String id_pkp, String status) async {
+      final response = await client.post(
+          "$baseUrl/verifpkp.php",
+          headers: {"content-type": "application/json"},
+          body: json.encode(<String, String>{
+            "id_skp": id_pkp,
+            "status_prakp": status
+          })
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
 // ------------------------------Kerja Praktek------------------------------
-  Future<List<Kp>> getKp() async {
-    final response = await client.get("$baseUrl/getdata.php");
-    if (response.statusCode == 200) {
-      return KpFromJson(response.body);
-    } else {
-      return null;
+    Future<List<Kp>> getKp() async {
+      final response = await client.get("$baseUrl/getdata.php");
+      if (response.statusCode == 200) {
+        return KpFromJson(response.body);
+      } else {
+        return null;
+      }
     }
-  }
 
 // Future<bool> createJadwal(Jadwal data) async {
 //   var request = http.MultipartRequest(
@@ -252,179 +275,178 @@ Future<bool> deleteSkkp(String id_skp) async {
 //     return false;
 //   }
 // }
-  Future<bool> createKp(Kp data, String id_kp, String id_mhs) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/adddata.php")
-    );
+    Future<bool> createKp(Kp data, String id_kp, String id_mhs) async {
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse("$baseUrl/adddata.php")
+      );
 
-    request.fields.addAll({
-      "semester": data.semester,
-      "tahun_kp":data.tahun_kp,
-      "jdl_kp":data.jdl_kp,
-      "status":data.status,
-      "nim":data.nim,
-      "tool":data.tool,
-      "spek":data.spek,
-      "dokumen":data.dokumen,
-      "penguji":data.penguji,
-      "ruangan":data.ruangan,
-      "lembaga":data.lembaga,
-      "pimpinan":data.pimpinan,
-      "alamat":data.alamat,
-      "telp_lembaga":data.telp_lembaga,
-      "wkt_pel_kp":data.wkt_pel_kp,
-    });
+      request.fields.addAll({
+        "semester": data.semester,
+        "tahun_kp": data.tahun_kp,
+        "jdl_kp": data.jdl_kp,
+        "status": data.status,
+        "nim": data.nim,
+        "tool": data.tool,
+        "spek": data.spek,
+        "dokumen": data.dokumen,
+        "penguji": data.penguji,
+        "ruangan": data.ruangan,
+        "lembaga": data.lembaga,
+        "pimpinan": data.pimpinan,
+        "alamat": data.alamat,
+        "telp_lembaga": data.telp_lembaga,
+        "wkt_pel_kp": data.wkt_pel_kp,
+      });
 
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    Future<bool> updateKp(Kp data, String id_kp) async {
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse("$baseUrl/editdata.php")
+      );
+
+
+      request.fields.addAll({
+        "id_kp": id_kp,
+        "semester": data.semester,
+        "tahun_kp": data.tahun_kp,
+        "jdl_kp": data.jdl_kp,
+        "status": data.status,
+        "nim": data.nim,
+        "nik": data.nik,
+        "tool": data.tool,
+        "spek": data.spek,
+        "dokumen": data.dokumen,
+        "penguji": data.penguji,
+        "ruangan": data.ruangan,
+        "lembaga": data.lembaga,
+        "pimpinan": data.pimpinan,
+        "alamat": data.alamat,
+        "telp_lembaga": data.telp_lembaga,
+        "wkt_pel_kp": data.wkt_pel_kp,
+      });
+
+
+      var response = await request.send();
+      // print(response.contentLength);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+      // if (response.statusCode == 200) {
+      // if (data.id_matkul != null && data.id_dosen != null) {
+      //   print("masuk true");
+      //   print(data);
+      //   return true;
+      // } else {
+      //   print("masuk else");
+      //   return false;
+      // }
+    }
+
+    Future<bool> deleteKp(String id_kp) async {
+      final response = await client.post(
+          "$baseUrl/delete.php",
+          headers: {"content-type": "application/json"},
+          body: json.encode(<String, String>{
+            "id_kp": id_kp,
+          })
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    // ------------------------------Jadwal------------------------------
+    Future<List<Ukp>> getJadwal() async {
+      final response = await client.get("$baseUrl/getjad.php");
+      if (response.statusCode == 200) {
+        return UkpFromJson(response.body);
+      } else {
+        return null;
+      }
+    }
+
+    Future<bool> createUkp(Ukp data, String id_kp, String id_mhs) async {
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse("$baseUrl/addjad.php")
+      );
+
+      request.fields.addAll({
+        "tahun_ukp": data.tahun_ukp,
+        "ruangan": data.ruangan,
+        "penguji": data.penguji,
+        "jdwl_ujian": data.jdwl_ujian,
+        "status_ujian": data.status_ujian,
+      });
+
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    Future<bool> updateUkp(Ukp data, String id_) async {
+      var request = http.MultipartRequest(
+          'POST',
+          Uri.parse("$baseUrl/editdata.php")
+      );
+
+
+      request.fields.addAll({
+        "tahun_ukp": data.tahun_ukp,
+        "ruangan": data.ruangan,
+        "penguji": data.penguji,
+        "jdwl_ujian": data.jdwl_ujian,
+        "status_ujian": data.status_ujian,
+      });
+
+
+      var response = await request.send();
+      // print(response.contentLength);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+      // if (response.statusCode == 200) {
+      // if (data.id_matkul != null && data.id_dosen != null) {
+      //   print("masuk true");
+      //   print(data);
+      //   return true;
+      // } else {
+      //   print("masuk else");
+      //   return false;
+      // }
+    }
+
+    Future<bool> deleteUkp(String id_kp) async {
+      final response = await client.post(
+          "$baseUrl/delete.php",
+          headers: {"content-type": "application/json"},
+          body: json.encode(<String, String>{
+          })
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
-  Future<bool> updateKp(Kp data, String id_kp) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/editdata.php")
-    );
-
-
-    request.fields.addAll({
-      "id_kp": id_kp,
-      "semester": data.semester,
-      "tahun_kp":data.tahun_kp,
-      "jdl_kp":data.jdl_kp,
-      "status":data.status,
-      "nim":data.nim,
-      "nik": data.nik,
-      "tool":data.tool,
-      "spek":data.spek,
-      "dokumen":data.dokumen,
-      "penguji":data.penguji,
-      "ruangan":data.ruangan,
-      "lembaga":data.lembaga,
-      "pimpinan":data.pimpinan,
-      "alamat":data.alamat,
-      "telp_lembaga":data.telp_lembaga,
-      "wkt_pel_kp":data.wkt_pel_kp,
-    });
-
-
-    var response = await request.send();
-    // print(response.contentLength);
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-    // if (response.statusCode == 200) {
-    // if (data.id_matkul != null && data.id_dosen != null) {
-    //   print("masuk true");
-    //   print(data);
-    //   return true;
-    // } else {
-    //   print("masuk else");
-    //   return false;
-    // }
-  }
-
-  Future<bool> deleteKp(String id_kp) async {
-    final response = await client.post(
-        "$baseUrl/delete.php",
-        headers: {"content-type": "application/json"},
-        body: json.encode(<String, String>{
-          "id_kp": id_kp,
-        })
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  // ------------------------------Jadwal------------------------------
-  Future<List<Ukp>> getJadwal() async {
-    final response = await client.get("$baseUrl/getjad.php");
-    if (response.statusCode == 200) {
-      return UkpFromJson(response.body);
-    } else {
-      return null;
-    }
-  }
-
-  Future<bool> createUkp(Ukp data, String id_kp, String id_mhs) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/addjad.php")
-    );
-
-    request.fields.addAll({
-      "tahun_ukp":data.tahun_ukp,
-      "ruangan":data.ruangan,
-      "penguji":data.penguji,
-      "jdwl_ujian":data.jdwl_ujian,
-      "status_ujian":data.status_ujian,
-    });
-
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> updateUkp(Ukp data, String id_) async {
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse("$baseUrl/editdata.php")
-    );
-
-
-    request.fields.addAll({
-      "tahun_ukp":data.tahun_ukp,
-      "ruangan":data.ruangan,
-      "penguji":data.penguji,
-      "jdwl_ujian":data.jdwl_ujian,
-      "status_ujian":data.status_ujian,
-    });
-
-
-    var response = await request.send();
-    // print(response.contentLength);
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-    // if (response.statusCode == 200) {
-    // if (data.id_matkul != null && data.id_dosen != null) {
-    //   print("masuk true");
-    //   print(data);
-    //   return true;
-    // } else {
-    //   print("masuk else");
-    //   return false;
-    // }
-  }
-
-  Future<bool> deleteUkp(String id_kp) async {
-    final response = await client.post(
-        "$baseUrl/delete.php",
-        headers: {"content-type": "application/json"},
-        body: json.encode(<String, String>{
-
-        })
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-}
